@@ -28,7 +28,7 @@ const parseArgs = async () => {
     videoProfile: "high444p",
     pixelFormat: "yuv444p",
     outputFormat: "matroska",
-    replaceExisting: true,
+    doNotReplaceExisting: false,
   };
 
   const parser = yargs(process.argv.slice(2))
@@ -61,9 +61,9 @@ const parseArgs = async () => {
       outputFormat: {
         default: defaults.outputFormat,
       },
-      y: {
+      n: {
         type: "boolean",
-        default: defaults.replaceExisting,
+        default: defaults.doNotReplaceExisting,
       },
     })
     .strict();
@@ -78,7 +78,7 @@ const parseArgs = async () => {
     videoProfile,
     pixelFormat,
     outputFormat,
-    y: replaceExisting,
+    n: doNotReplaceExisting,
   } = await parser.argv;
 
   const outputFile = generateOutputFilename();
@@ -108,7 +108,7 @@ const parseArgs = async () => {
     "-f",
     outputFormat,
     outputFile,
-    replaceExisting ? "-y" : "-n",
+    doNotReplaceExisting ? "-n" : "-y",
   ];
 
   return args;
