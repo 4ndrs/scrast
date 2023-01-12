@@ -13,6 +13,13 @@ const main = async () => {
 
   ffmpeg.run(args);
   ffmpeg.onClose(screen.end);
+
+  process.on("uncaughtException", handleUncaughtException);
+};
+
+const handleUncaughtException = (error: Error) => {
+  screen.printError(error.message);
+  process.exit(1);
 };
 
 const parseArgs = async () => {
