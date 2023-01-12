@@ -30,6 +30,7 @@ const parseArgs = async () => {
     probeSize: "128M",
     threadQueueSize: "1024",
     selectRegion: false,
+    windowId: "0",
     input: ":0.0",
     preset: "p7",
     tune: "lossless",
@@ -78,10 +79,17 @@ const parseArgs = async () => {
       },
       selectRegion: {
         type: "boolean",
-        default: false,
+        default: defaults.selectRegion,
         describe:
           "If set, will be asked to select a region on the screen to be " +
           "recorded.",
+      },
+      windowId: {
+        type: "string",
+        default: defaults.windowId,
+        describe:
+          "The window to record. Default is the root window. Use " +
+          "xwininfo to get the ID.",
       },
       n: {
         alias: "doNotReplaceExisting",
@@ -96,6 +104,7 @@ const parseArgs = async () => {
     i: input,
     alsaAudio,
     selectRegion,
+    windowId,
     probeSize,
     preset,
     tune,
@@ -118,6 +127,8 @@ const parseArgs = async () => {
     selectRegion ? "1" : "0",
     "-show_region",
     "1",
+    "-window_id",
+    windowId,
     "-i",
     input,
   ];
