@@ -41,7 +41,7 @@ const getColoredStatus = (status: Status) => {
 };
 
 const assertNever = (value: never) => {
-  throw new Error(`Unhanlded case: ${value}`);
+  throw new Error(`Unhandled case: ${value}`);
 };
 
 export default { update, end };
