@@ -27,6 +27,10 @@ const end = () => {
   process.stdout.write("\n");
 };
 
+const printError = (message: string) => {
+  process.stderr.write(`\n\n${COLORS.RED}ERROR: ${message}${ENDCOLOR}`);
+};
+
 const getColoredStatus = (status: Status) => {
   switch (status) {
     case "recording":
@@ -44,4 +48,4 @@ const assertNever = (value: never) => {
   throw new Error(`Unhandled case: ${value}`);
 };
 
-export default { update, end };
+export default { update, end, printError };
