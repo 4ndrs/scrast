@@ -34,13 +34,16 @@ const parseArgs = async () => {
   const parser = yargs(process.argv.slice(2))
     .options({
       r: {
+        alias: "inputFrameRate",
         type: "number",
         default: defaults.frameRate,
       },
       s: {
+        alias: "inputSize",
         default: defaults.resolution,
       },
       i: {
+        alias: "input",
         default: defaults.input,
       },
       probeSize: {
@@ -62,6 +65,7 @@ const parseArgs = async () => {
         default: defaults.outputFormat,
       },
       n: {
+        alias: "doNotReplaceExisting",
         type: "boolean",
         default: defaults.doNotReplaceExisting,
       },
