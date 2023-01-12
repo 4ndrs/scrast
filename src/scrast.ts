@@ -26,7 +26,6 @@ const parseArgs = async () => {
   const defaults = {
     inputFormat: "x11grab",
     videoCodec: "h264_nvenc",
-    resolution: "2560x1440",
     frameRate: 60,
     probeSize: "128M",
     threadQueueSize: "1024",
@@ -46,10 +45,6 @@ const parseArgs = async () => {
         alias: "inputFrameRate",
         type: "number",
         default: defaults.frameRate,
-      },
-      s: {
-        alias: "inputSize",
-        default: defaults.resolution,
       },
       i: {
         alias: "input",
@@ -98,7 +93,6 @@ const parseArgs = async () => {
 
   const {
     r: rate,
-    s: resolution,
     i: input,
     alsaAudio,
     selectRegion,
@@ -114,8 +108,6 @@ const parseArgs = async () => {
   const videoInputArgs = [
     "-f",
     defaults.inputFormat,
-    "-s",
-    resolution,
     "-r",
     String(rate),
     "-probesize",
