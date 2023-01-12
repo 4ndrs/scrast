@@ -84,6 +84,7 @@ const parseArgs = async () => {
   const outputFile = generateOutputFilename();
 
   const args = [
+    "-hide_banner",
     "-f",
     defaults.inputFormat,
     "-s",
