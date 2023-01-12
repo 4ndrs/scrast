@@ -3,20 +3,32 @@ import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { setStore } from "./store";
 import { getSeconds } from "./utils";
 
+import type { Status } from "./types";
+
 let process: ChildProcessWithoutNullStreams | null;
 let errorBuffer = "";
 
-const run = (args: Array<string>) => {
+type Type = Exclude<Status, "stopped" | "paused">;
+type Options = { updateStore: boolean; type: Type };
+
+const OPTIONS: Options = { updateStore: true, type: "recording" };
+
+const run = (args: Array<string>, options = OPTIONS) => {
   if (process) {
     throw new Error("Process is assigned");
   }
 
   process = spawn("ffmpeg", args);
-  process.on("spawn", handleSpawn);
+
   process.on("close", handleClose);
   process.on("error", handleError);
   process.stderr.on("data", (data) => (errorBuffer += data.toString()));
-  process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
+
+  if (options.updateStore) {
+    process.on("spawn", () => updateStatus(options.type));
+    process.on("close", () => updateStatus("stopped"));
+    process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
+  }
 };
 
 const onClose = (callback: () => void) => {
@@ -35,12 +47,11 @@ const updateSizeAndSeconds = (stderr: string) => {
   }
 
   const { size, seconds } = result;
-
   setStore((current) => ({ ...current, seconds, size }));
 };
 
-const handleSpawn = () => {
-  setStore((current) => ({ ...current, status: "recording" }));
+const updateStatus = (status: Status) => {
+  setStore((current) => ({ ...current, status }));
 };
 
 const handleClose = (code: number, signal: NodeJS.Signals) => {
@@ -48,8 +59,6 @@ const handleClose = (code: number, signal: NodeJS.Signals) => {
 
   errorBuffer = "";
   process = null;
-
-  setStore((current) => ({ ...current, status: "stopped" }));
 
   if (signal !== null) {
     console.error(`\nffmpeg closed with signal ${signal}, code ${code}`);
