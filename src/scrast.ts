@@ -30,6 +30,7 @@ const parseArgs = async () => {
     frameRate: 60,
     probeSize: "128M",
     threadQueueSize: "1024",
+    selectRegion: false,
     input: ":0.0",
     preset: "p7",
     tune: "lossless",
@@ -80,6 +81,13 @@ const parseArgs = async () => {
           "One of the devices shown in `arecord -L`. Audio will be " +
           "enabled if set.",
       },
+      selectRegion: {
+        type: "boolean",
+        default: false,
+        describe:
+          "If set, will be asked to select a region on the screen to be " +
+          "recorded.",
+      },
       n: {
         alias: "doNotReplaceExisting",
         type: "boolean",
@@ -93,6 +101,7 @@ const parseArgs = async () => {
     s: resolution,
     i: input,
     alsaAudio,
+    selectRegion,
     probeSize,
     preset,
     tune,
@@ -113,6 +122,8 @@ const parseArgs = async () => {
     probeSize,
     "-thread_queue_size",
     defaults.threadQueueSize,
+    "-select_region",
+    selectRegion ? "1" : "0",
     "-i",
     input,
   ];
