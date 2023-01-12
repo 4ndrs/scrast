@@ -102,7 +102,20 @@ const parseArgs = async () => {
     n: doNotReplaceExisting,
   } = await parser.argv;
 
-  const outputFile = generateOutputFilename();
+  const videoInputArgs = [
+    "-f",
+    defaults.inputFormat,
+    "-s",
+    resolution,
+    "-r",
+    String(rate),
+    "-probesize",
+    probeSize,
+    "-thread_queue_size",
+    defaults.threadQueueSize,
+    "-i",
+    input,
+  ];
 
   const audioInputArgs = alsaAudio
     ? [
@@ -116,22 +129,7 @@ const parseArgs = async () => {
     : [];
 
   const audioOutputArgs = alsaAudio ? ["-c:a", "copy"] : [];
-
-  const args = [
-    "-hide_banner",
-    "-f",
-    defaults.inputFormat,
-    "-s",
-    resolution,
-    "-r",
-    String(rate),
-    "-probesize",
-    probeSize,
-    "-thread_queue_size",
-    defaults.threadQueueSize,
-    "-i",
-    input,
-    ...audioInputArgs,
+  const videoOutputArgs = [
     "-c:v",
     defaults.videoCodec,
     "-preset",
@@ -142,9 +140,17 @@ const parseArgs = async () => {
     videoProfile,
     "-pix_fmt",
     pixelFormat,
+  ];
+
+  const outputFile = generateOutputFilename();
+  const args = [
+    "-hide_banner",
+    ...videoInputArgs,
+    ...audioInputArgs,
+    ...videoOutputArgs,
+    ...audioOutputArgs,
     "-f",
     outputFormat,
-    ...audioOutputArgs,
     outputFile,
     doNotReplaceExisting ? "-n" : "-y",
   ];
