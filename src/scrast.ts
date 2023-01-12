@@ -124,6 +124,8 @@ const parseArgs = async () => {
     defaults.threadQueueSize,
     "-select_region",
     selectRegion ? "1" : "0",
+    "-show_region",
+    "1",
     "-i",
     input,
   ];
