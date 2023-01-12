@@ -51,6 +51,7 @@ const parseArgs = async () => {
       },
       preset: {
         default: defaults.preset,
+        choices: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"],
       },
       tune: {
         default: defaults.tune,
