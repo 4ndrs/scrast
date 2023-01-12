@@ -66,7 +66,7 @@ const handleClose = (code: number, signal: NodeJS.Signals) => {
 
   if (signal === null && ![0, 255].includes(code)) {
     throw new Error(
-      `Abnormal termination of ffmpeg, dumping error buffer:\n${buffer}`
+      `Abnormal termination of ffmpeg, dumping error buffer:\n\n${buffer}`
     );
   }
 };
