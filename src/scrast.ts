@@ -29,6 +29,7 @@ const parseArgs = async () => {
     resolution: "2560x1440",
     frameRate: 60,
     probeSize: "128M",
+    threadQueueSize: "1024",
     input: ":0.0",
     preset: "p7",
     tune: "lossless",
@@ -73,6 +74,12 @@ const parseArgs = async () => {
       outputFormat: {
         default: defaults.outputFormat,
       },
+      alsaAudio: {
+        type: "string",
+        describe:
+          "One of the devices shown in `arecord -L`. Audio will be " +
+          "enabled if set.",
+      },
       n: {
         alias: "doNotReplaceExisting",
         type: "boolean",
@@ -85,6 +92,7 @@ const parseArgs = async () => {
     r: rate,
     s: resolution,
     i: input,
+    alsaAudio,
     probeSize,
     preset,
     tune,
@@ -96,6 +104,19 @@ const parseArgs = async () => {
 
   const outputFile = generateOutputFilename();
 
+  const audioInputArgs = alsaAudio
+    ? [
+        "-f",
+        "alsa",
+        "-thread_queue_size",
+        defaults.threadQueueSize,
+        "-i",
+        alsaAudio,
+      ]
+    : [];
+
+  const audioOutputArgs = alsaAudio ? ["-c:a", "copy"] : [];
+
   const args = [
     "-hide_banner",
     "-f",
@@ -106,8 +127,11 @@ const parseArgs = async () => {
     String(rate),
     "-probesize",
     probeSize,
+    "-thread_queue_size",
+    defaults.threadQueueSize,
     "-i",
     input,
+    ...audioInputArgs,
     "-c:v",
     defaults.videoCodec,
     "-preset",
@@ -120,6 +144,7 @@ const parseArgs = async () => {
     pixelFormat,
     "-f",
     outputFormat,
+    ...audioOutputArgs,
     outputFile,
     doNotReplaceExisting ? "-n" : "-y",
   ];
