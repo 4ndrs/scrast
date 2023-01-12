@@ -4,6 +4,7 @@ import { setStore } from "./store";
 import { getSeconds } from "./utils";
 
 let process: ChildProcessWithoutNullStreams | null;
+let errorBuffer = "";
 
 const run = (args: Array<string>) => {
   if (process) {
@@ -14,6 +15,7 @@ const run = (args: Array<string>) => {
   process.on("spawn", handleSpawn);
   process.on("close", handleClose);
   process.on("error", handleError);
+  process.stderr.on("data", (data) => (errorBuffer += data.toString()));
   process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
 };
 
@@ -41,9 +43,23 @@ const handleSpawn = () => {
   setStore((current) => ({ ...current, status: "recording" }));
 };
 
-const handleClose = () => {
+const handleClose = (code: number, signal: NodeJS.Signals) => {
+  const buffer = errorBuffer;
+
+  errorBuffer = "";
   process = null;
+
   setStore((current) => ({ ...current, status: "stopped" }));
+
+  if (signal !== null) {
+    console.error(`\nffmpeg closed with signal ${signal}, code ${code}`);
+  }
+
+  if (signal === null && ![0, 255].includes(code)) {
+    throw new Error(
+      `Abnormal termination of ffmpeg, dumping error buffer:\n${buffer}`
+    );
+  }
 };
 
 const handleError = (error: unknown) => {
