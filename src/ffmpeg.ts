@@ -13,6 +13,7 @@ const run = (args: Array<string>) => {
   process = spawn("ffmpeg", args);
   process.on("spawn", handleSpawn);
   process.on("close", handleClose);
+  process.on("error", handleError);
   process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
 };
 
@@ -45,6 +46,18 @@ const handleClose = () => {
   setStore((current) => ({ ...current, status: "stopped" }));
 };
 
+const handleError = (error: unknown) => {
+  if (!isError(error)) {
+    return;
+  }
+
+  if (error.code === "ENOENT") {
+    throw new Error("ffmpeg binary not found");
+  }
+
+  throw error;
+};
+
 const parseSizeAndTime = (line: string) => {
   const regex = /(?<size>[0-9]+)kB\s+time=(?<time>\d{2,}:\d{2}:\d{2}.\d{2})/;
   const match = line.match(regex)?.groups;
@@ -60,5 +73,8 @@ const parseSizeAndTime = (line: string) => {
     seconds: getSeconds(time),
   };
 };
+
+const isError = (error: unknown): error is NodeJS.ErrnoException =>
+  error instanceof Error;
 
 export default { run, onClose };
