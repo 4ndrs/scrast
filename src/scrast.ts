@@ -55,6 +55,7 @@ const parseArgs = async () => {
       },
       tune: {
         default: defaults.tune,
+        choices: ["hq", "ll", "ull", "lossless"],
       },
       videoProfile: {
         default: defaults.videoProfile,
