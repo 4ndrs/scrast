@@ -38,6 +38,7 @@ const parseArgs = async () => {
     pixelFormat: "yuv444p",
     outputFormat: "matroska",
     doNotReplaceExisting: false,
+    doNotDrawMouse: false,
   };
 
   const parser = yargs(process.argv.slice(2))
@@ -96,6 +97,10 @@ const parseArgs = async () => {
         type: "boolean",
         default: defaults.doNotReplaceExisting,
       },
+      doNotDrawMouse: {
+        type: "boolean",
+        default: defaults.doNotDrawMouse,
+      },
     })
     .strict();
 
@@ -103,6 +108,7 @@ const parseArgs = async () => {
     r: rate,
     i: input,
     alsaAudio,
+    doNotDrawMouse,
     selectRegion,
     windowId,
     probeSize,
@@ -123,6 +129,8 @@ const parseArgs = async () => {
     probeSize,
     "-thread_queue_size",
     defaults.threadQueueSize,
+    "-draw_mouse",
+    doNotDrawMouse ? "0" : "1",
     "-select_region",
     selectRegion ? "1" : "0",
     "-show_region",
