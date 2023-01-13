@@ -1,8 +1,9 @@
-import { ChildProcessWithoutNullStreams, spawn } from "child_process";
+import { spawn } from "child_process";
 
 import { setStore } from "./store";
 import { getSeconds } from "./utils";
 
+import type { ChildProcessWithoutNullStreams } from "child_process";
 import type { Status } from "./types";
 
 let process: ChildProcessWithoutNullStreams | null;
