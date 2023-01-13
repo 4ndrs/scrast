@@ -8,7 +8,7 @@ import type { Status } from "./types";
 let process: ChildProcessWithoutNullStreams | null;
 let errorBuffer = "";
 
-type Type = Exclude<Status, "stopped" | "paused">;
+type Type = Exclude<Status, "stopping" | "stopped" | "paused">;
 type Options = { updateStore: boolean; type: Type };
 
 const OPTIONS: Options = { updateStore: true, type: "recording" };
@@ -29,6 +29,20 @@ const run = (args: Array<string>, options = OPTIONS) => {
     process.on("close", () => updateStatus("stopped"));
     process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
   }
+};
+
+type KillOptions = { updateStore: boolean };
+
+const kill = (options: KillOptions = { updateStore: true }) => {
+  if (!process) {
+    return;
+  }
+
+  if (options.updateStore) {
+    updateStatus("stopping");
+  }
+
+  process.kill("SIGTERM");
 };
 
 const onClose = (callback: () => void) => {
@@ -102,4 +116,4 @@ const parseSizeAndTime = (line: string) => {
 const isError = (error: unknown): error is NodeJS.ErrnoException =>
   error instanceof Error;
 
-export default { run, onClose };
+export default { run, kill, onClose };
