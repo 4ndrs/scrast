@@ -38,6 +38,24 @@ const kill = () => {
   process.kill("SIGTERM");
 };
 
+const pause = () => {
+  if (!process) {
+    return;
+  }
+
+  process.kill("SIGTSTP");
+  updateStatus("paused");
+};
+
+const resume = () => {
+  if (!process) {
+    return;
+  }
+
+  updateStatus("recording");
+  process.kill("SIGCONT");
+};
+
 const onClose = (callback: () => void) => {
   if (!process) {
     return;
@@ -109,4 +127,4 @@ const parseSizeAndTime = (line: string) => {
 const isError = (error: unknown): error is NodeJS.ErrnoException =>
   error instanceof Error;
 
-export default { run, kill, onClose };
+export default { run, kill, pause, resume, onClose };
