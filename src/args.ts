@@ -83,6 +83,21 @@ const parseArgs = async () => {
         default: defaults.noMouse,
       },
     })
+    .command(
+      "stop",
+      "sends the stop signal to the currently running instance.",
+      () => sendCommand("stop")
+    )
+    .command(
+      "pause",
+      "sends the pause signal to the currently running instance.",
+      () => sendCommand("pause")
+    )
+    .command(
+      "resume",
+      "sends the resume signal to the currently running instance.",
+      () => sendCommand("resume")
+    )
     .strict();
 
   const {
@@ -169,8 +184,22 @@ const runIpc = async () => {
   try {
     await ipc.start();
   } catch (error) {
-    if (error instanceof Error && error.message === "socket is active") {
+    if (typeof error === "string" && error === "socket is active") {
       console.error("There is already an instance running");
+      process.exit(1);
+    }
+
+    throw error;
+  }
+};
+
+const sendCommand = async (command: string) => {
+  try {
+    await ipc.sendMessageToSocket(command);
+    process.exit();
+  } catch (error) {
+    if (typeof error === "string" && error === "socket is inactive") {
+      console.log("There is no instance running");
       process.exit(1);
     }
 
