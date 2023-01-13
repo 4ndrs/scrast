@@ -35,6 +35,10 @@ const kill = () => {
     return;
   }
 
+  if (process.killed) {
+    process.kill("SIGCONT");
+  }
+
   updateStatus("stopping");
   process.kill("SIGTERM");
 };
