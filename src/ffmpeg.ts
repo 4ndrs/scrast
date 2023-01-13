@@ -9,12 +9,7 @@ import type { Status } from "./types";
 let process: ChildProcessWithoutNullStreams | null;
 let errorBuffer = "";
 
-type Type = Exclude<Status, "stopping" | "stopped" | "paused">;
-type Options = { type: Type };
-
-const OPTIONS: Options = { type: "recording" };
-
-const run = (args: Array<string>, options = OPTIONS) => {
+const run = (args: Array<string>) => {
   if (process) {
     throw new Error("Process is assigned");
   }
@@ -25,7 +20,7 @@ const run = (args: Array<string>, options = OPTIONS) => {
   process.on("error", handleError);
   process.stderr.on("data", (data) => (errorBuffer += data.toString()));
 
-  process.on("spawn", () => updateStatus(options.type));
+  process.on("spawn", () => updateStatus("recording"));
   process.on("close", () => updateStatus("stopped"));
   process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
 };
