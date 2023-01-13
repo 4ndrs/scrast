@@ -14,6 +14,9 @@ const main = async () => {
 
   process.on("SIGINT", handleStop);
   process.on("SIGTERM", handleStop);
+  process.on("SIGTSTP", handlePause);
+  process.on("SIGCONT", handleResume);
+
   process.on("uncaughtException", handleUncaughtException);
 };
 
@@ -24,6 +27,14 @@ const handleUncaughtException = (error: Error) => {
 
 const handleStop = () => {
   ffmpeg.kill();
+};
+
+const handlePause = () => {
+  ffmpeg.pause();
+};
+
+const handleResume = () => {
+  ffmpeg.resume();
 };
 
 export { main };
