@@ -94,7 +94,7 @@ const parseSizeAndTime = (line: string) => {
   const { size, time } = match;
 
   return {
-    size: Number(size),
+    size: Number(size) * 1024,
     seconds: getSeconds(time),
   };
 };
