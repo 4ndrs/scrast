@@ -16,6 +16,26 @@ const getSeconds = (timestamp: string) =>
   );
 
 /**
+ * Returns a string with bytes converted to human
+ * readable sizes: bytes, KiB, MiB, GiB
+ */
+const getHumanSize = (bytes: number) => {
+  if (bytes < 1024) {
+    return `${bytes} bytes`;
+  }
+
+  if (bytes < 1.049e6) {
+    return `${bytes / 1024} KiB`;
+  }
+
+  if (bytes < 1.074e9) {
+    return `${(bytes / 1.049e6).toFixed(2)} MiB`;
+  }
+
+  return `${(bytes / 1.074e9).toFixed(2)} GiB`;
+};
+
+/**
  * Generates a filename with unix timestamp in the scrast directory
  * creates the directory if it doesn't exist
  */
@@ -29,4 +49,4 @@ const generateOutputFilename = () => {
   return `${scrastDir}/${Date.now()}.mkv`;
 };
 
-export { getSeconds, generateOutputFilename };
+export { getSeconds, getHumanSize, generateOutputFilename };
