@@ -199,7 +199,7 @@ const sendCommand = async (command: string) => {
     process.exit();
   } catch (error) {
     if (typeof error === "string" && error === "socket is inactive") {
-      console.log("There is no instance running");
+      console.error("There is no instance running");
       process.exit(1);
     }
 
