@@ -4,4 +4,4 @@ export interface Store {
   size: number;
 }
 
-export type Status = "recording" | "paused" | "stopped";
+export type Status = "recording" | "stopping" | "paused" | "stopped";

@@ -10,6 +10,7 @@ const COLORS = Object.freeze({
   RED: "\u001b[1;31m",
   YELLOW: "\u001b[1;33m",
   WHITE: "\u001b[1;37m",
+  MAGENTA: "\u001b[1;35m",
 });
 
 const update = () => {
@@ -36,6 +37,8 @@ const getColoredStatus = (status: Status) => {
   switch (status) {
     case "recording":
       return `${COLORS.RED}recording${ENDCOLOR}`;
+    case "stopping":
+      return `${COLORS.MAGENTA}stopping${ENDCOLOR}`;
     case "paused":
       return `${COLORS.YELLOW}paused${ENDCOLOR}`;
     case "stopped":
