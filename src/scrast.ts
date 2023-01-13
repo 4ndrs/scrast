@@ -20,11 +20,6 @@ const main = async () => {
   process.on("uncaughtException", handleUncaughtException);
 };
 
-const handleUncaughtException = (error: Error) => {
-  screen.printError(error.message);
-  process.exit(1);
-};
-
 const handleStop = () => {
   ffmpeg.kill();
 };
@@ -35,6 +30,11 @@ const handlePause = () => {
 
 const handleResume = () => {
   ffmpeg.resume();
+};
+
+const handleUncaughtException = (error: Error) => {
+  screen.printError(error.message);
+  process.exit(1);
 };
 
 export { main };
