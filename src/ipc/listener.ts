@@ -27,9 +27,9 @@ const listener = net.createServer((connection) => {
       case "ping pong narashite":
         connection.end("ping pong pong, girls ganbare!🍀\n");
         break;
-      default:
-        connection.end();
     }
+
+    connection.end();
   });
 });
 
