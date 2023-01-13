@@ -8,6 +8,7 @@ import ffmpeg from "../ffmpeg";
 import type { ChildProcess, Serializable } from "child_process";
 
 let listener: ChildProcess;
+const SOCKETFILE = "/tmp/scrast.sock";
 
 const start = async () => {
   await checkSocket();
@@ -39,20 +40,24 @@ const handleMessage = (message: Serializable) => {
   }
 };
 
+const sendMessageToSocket = (message: string) =>
+  new Promise((resolve, reject) => {
+    const connection = connect(SOCKETFILE);
+
+    connection.on("ready", () => resolve(connection.write(message)));
+    connection.on("error", () => reject("socket is inactive"));
+  });
+
 /**
  * Checks if /tmp/scrast.sock exists, if it does and it is active throws
  * an error. The socket file will be removed if it is not active.
  */
 const checkSocket = () =>
   new Promise<void>((resolve, reject) => {
-    const socketFile = "/tmp/scrast.sock";
-    const connection = connect(socketFile);
+    const connection = connect(SOCKETFILE);
 
-    connection.on("ready", () => {
-      reject(new Error("socket is active"));
-    });
-
-    connection.on("error", () => resolve(unlinkSync(socketFile)));
+    connection.on("ready", () => reject("socket is active"));
+    connection.on("error", () => resolve(unlinkSync(SOCKETFILE)));
   });
 
-export default { start, kill };
+export default { start, kill, sendMessageToSocket };
