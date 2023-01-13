@@ -1,5 +1,6 @@
 import ffmpeg from "./ffmpeg";
 import screen from "./screen";
+import ipc from "./ipc";
 
 import { StoreEmitter } from "./store";
 import { parseArgs } from "./args";
@@ -22,6 +23,7 @@ const main = async () => {
 
 const handleStop = () => {
   ffmpeg.kill();
+  ipc.kill();
 };
 
 const handlePause = () => {
@@ -33,6 +35,9 @@ const handleResume = () => {
 };
 
 const handleUncaughtException = (error: Error) => {
+  ffmpeg.kill();
+  ipc.kill();
+
   screen.printError(error.message);
   process.exit(1);
 };

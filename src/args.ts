@@ -1,5 +1,6 @@
 import yargs from "yargs/yargs";
 
+import ipc from "./ipc";
 import { generateOutputFilename } from "./utils";
 
 const parseArgs = async () => {
@@ -159,7 +160,22 @@ const parseArgs = async () => {
     doNotReplaceExisting ? "-n" : "-y",
   ];
 
+  await runIpc();
+
   return args;
+};
+
+const runIpc = async () => {
+  try {
+    await ipc.start();
+  } catch (error) {
+    if (error instanceof Error && error.message === "socket is active") {
+      console.error("There is already an instance running");
+      process.exit(1);
+    }
+
+    throw error;
+  }
 };
 
 export { parseArgs };
