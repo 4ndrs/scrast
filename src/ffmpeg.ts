@@ -9,9 +9,9 @@ let process: ChildProcessWithoutNullStreams | null;
 let errorBuffer = "";
 
 type Type = Exclude<Status, "stopping" | "stopped" | "paused">;
-type Options = { updateStore: boolean; type: Type };
+type Options = { type: Type };
 
-const OPTIONS: Options = { updateStore: true, type: "recording" };
+const OPTIONS: Options = { type: "recording" };
 
 const run = (args: Array<string>, options = OPTIONS) => {
   if (process) {
@@ -24,24 +24,17 @@ const run = (args: Array<string>, options = OPTIONS) => {
   process.on("error", handleError);
   process.stderr.on("data", (data) => (errorBuffer += data.toString()));
 
-  if (options.updateStore) {
-    process.on("spawn", () => updateStatus(options.type));
-    process.on("close", () => updateStatus("stopped"));
-    process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
-  }
+  process.on("spawn", () => updateStatus(options.type));
+  process.on("close", () => updateStatus("stopped"));
+  process.stderr.on("data", (data) => updateSizeAndSeconds(data.toString()));
 };
 
-type KillOptions = { updateStore: boolean };
-
-const kill = (options: KillOptions = { updateStore: true }) => {
+const kill = () => {
   if (!process) {
     return;
   }
 
-  if (options.updateStore) {
-    updateStatus("stopping");
-  }
-
+  updateStatus("stopping");
   process.kill("SIGTERM");
 };
 
