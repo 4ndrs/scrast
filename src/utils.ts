@@ -36,6 +36,36 @@ const getHumanSize = (bytes: number) => {
 };
 
 /**
+ * Returns a string with seconds converted to human
+ * readable time: hours, minutes, seconds
+ */
+const getHumanTime = (seconds: number): string => {
+  seconds = Number(seconds.toFixed(0));
+
+  if (seconds < 60) {
+    return `${seconds} second${seconds === 1 ? "" : "s"}`;
+  }
+
+  if (seconds < 3600) {
+    const minutes = Math.floor(seconds / 60);
+    const remainder = seconds % 60;
+
+    return (
+      `${minutes} minute${minutes === 1 ? "" : "s"}` +
+      `${remainder > 0 ? `, ${getHumanTime(remainder)}` : ""}`
+    );
+  }
+
+  const hours = Math.floor(seconds / 3600);
+  const remainder = seconds % 3600;
+
+  return (
+    `${hours} hour${hours === 1 ? "" : "s"}` +
+    `${remainder > 0 ? `, ${getHumanTime(remainder)}` : ""}`
+  );
+};
+
+/**
  * Generates a filename with unix timestamp in the scrast directory
  * creates the directory if it doesn't exist
  */
@@ -49,4 +79,4 @@ const generateOutputFilename = () => {
   return `${scrastDir}/${Date.now()}.mkv`;
 };
 
-export { getSeconds, getHumanSize, generateOutputFilename };
+export { getSeconds, getHumanSize, getHumanTime, generateOutputFilename };
