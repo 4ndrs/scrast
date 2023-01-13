@@ -1,7 +1,7 @@
 import path from "path";
 import { fork } from "child_process";
 import { connect } from "node:net";
-import { existsSync, unlinkSync } from "fs";
+import { unlinkSync } from "fs";
 
 import ffmpeg from "../ffmpeg";
 
@@ -46,16 +46,13 @@ const handleMessage = (message: Serializable) => {
 const checkSocket = () =>
   new Promise<void>((resolve, reject) => {
     const socketFile = "/tmp/scrast.sock";
+    const connection = connect(socketFile);
 
-    if (existsSync(socketFile)) {
-      const connection = connect(socketFile);
+    connection.on("ready", () => {
+      reject(new Error("socket is active"));
+    });
 
-      connection.on("ready", () => {
-        reject(new Error("socket is active"));
-      });
-
-      connection.on("error", () => resolve(unlinkSync(socketFile)));
-    }
+    connection.on("error", () => resolve(unlinkSync(socketFile)));
   });
 
 export default { start, kill };
