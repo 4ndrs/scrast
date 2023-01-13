@@ -1,4 +1,5 @@
 import { getStore } from "./store";
+import { getHumanSize } from "./utils";
 
 import type { Status } from "./types";
 
@@ -19,7 +20,7 @@ const update = () => {
     `${CLEARLINE}` +
       `Status: ${coloredStatus}, ` +
       `Elapsed: ${COLORS.WHITE}${seconds} seconds${ENDCOLOR}, ` +
-      `size: ${COLORS.WHITE}${size} kB${ENDCOLOR}`
+      `size: ${COLORS.WHITE}${getHumanSize(size)}${ENDCOLOR}`
   );
 };
 
