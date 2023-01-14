@@ -14,6 +14,8 @@ const main = async () => {
   ffmpeg.onClose(screen.end);
   ffmpeg.onClose(ipc.kill);
 
+  process.title = "scrast";
+
   process.on("SIGINT", handleStop);
   process.on("SIGTERM", handleStop);
   process.on("SIGTSTP", handlePause);
