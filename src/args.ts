@@ -35,7 +35,7 @@ const parseArgs = async () => {
         default: defaults.frameRate,
       },
       s: {
-        alias: "select-region",
+        alias: "selectRegion",
         type: "boolean",
         default: defaults.selectRegion,
         describe:
@@ -43,7 +43,7 @@ const parseArgs = async () => {
           "recorded",
       },
       w: {
-        alias: "window-id",
+        alias: "windowId",
         type: "string",
         default: defaults.windowId,
         describe:
@@ -51,7 +51,7 @@ const parseArgs = async () => {
           "xwininfo to get the ID",
       },
       N: {
-        alias: "no-mouse",
+        alias: "noMouse",
         type: "boolean",
         default: defaults.noMouse,
       },
@@ -70,26 +70,26 @@ const parseArgs = async () => {
         choices: ["hq", "ll", "ull", "lossless"],
       },
       R: {
-        alias: "video-profile",
+        alias: "videoProfile",
         default: defaults.videoProfile,
       },
       x: {
-        alias: "pixel-format",
+        alias: "pixelFormat",
         default: defaults.pixelFormat,
       },
       f: {
-        alias: "output-format",
+        alias: "outputFormat",
         default: defaults.outputFormat,
       },
       a: {
-        alias: "alsa-audio",
+        alias: "alsaAudio",
         type: "string",
         describe:
           "One of the devices shown in `arecord -L`. Audio will be " +
           "enabled if set",
       },
       I: {
-        alias: "no-ipc",
+        alias: "noIpc",
         type: "boolean",
         default: defaults.noIpc,
         describe:
@@ -97,7 +97,7 @@ const parseArgs = async () => {
           "Commands will not work when this flag is set",
       },
       E: {
-        alias: "no-nvenc",
+        alias: "noNvenc",
         type: "string",
         describe:
           "Escape hatch. If set, no nvenc flags will be used, and anything " +
