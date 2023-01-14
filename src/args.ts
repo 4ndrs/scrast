@@ -129,7 +129,8 @@ const parseArgs = async () => {
     )
     .alias("help", "h")
     .alias("version", "v")
-    .strict();
+    .strict()
+    .usage("Command line utility to record the screen.\nUsage: $0 [options]");
 
   const {
     r: rate,
