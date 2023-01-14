@@ -87,6 +87,16 @@ const parseArgs = async () => {
           "One of the devices shown in `arecord -L`. Audio will be " +
           "enabled if set.",
       },
+      E: {
+        alias: "no-nvenc",
+        type: "string",
+        describe:
+          "Escape hatch. If set, no nvenc flags will be used, and anything " +
+          "passed to this flag will be parsed and set as ffmpeg's output " +
+          "flags. Useful for experimenting with ffmpeg, and for systems " +
+          "that do not have nvenc support. Must be used with '='.\n" +
+          "e.g.: -E='-c:v libx264 -preset ultrafast'",
+      },
     })
     .command(
       "stop",
@@ -120,6 +130,7 @@ const parseArgs = async () => {
     R: videoProfile,
     x: pixelFormat,
     f: outputFormat,
+    E: noNvenc,
   } = await parser.argv;
 
   const videoInputArgs = [
@@ -155,18 +166,20 @@ const parseArgs = async () => {
     : [];
 
   const audioOutputArgs = alsaAudio ? ["-c:a", "copy"] : [];
-  const videoOutputArgs = [
-    "-c:v",
-    defaults.videoCodec,
-    "-preset",
-    preset,
-    "-tune",
-    tune,
-    "-profile:v",
-    videoProfile,
-    "-pix_fmt",
-    pixelFormat,
-  ];
+  const videoOutputArgs = noNvenc
+    ? noNvenc.split(" ")
+    : [
+        "-c:v",
+        defaults.videoCodec,
+        "-preset",
+        preset,
+        "-tune",
+        tune,
+        "-profile:v",
+        videoProfile,
+        "-pix_fmt",
+        pixelFormat,
+      ];
 
   const outputFile = generateOutputFilename();
   const args = [
