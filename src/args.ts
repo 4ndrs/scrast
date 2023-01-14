@@ -20,6 +20,7 @@ const parseArgs = async () => {
     outputFormat: "matroska",
     replaceExisting: true,
     noMouse: false,
+    noIpc: false,
   };
 
   const parser = yargs(process.argv.slice(2))
@@ -87,6 +88,14 @@ const parseArgs = async () => {
           "One of the devices shown in `arecord -L`. Audio will be " +
           "enabled if set.",
       },
+      I: {
+        alias: "no-ipc",
+        type: "boolean",
+        default: defaults.noIpc,
+        describe:
+          "Disables the IPC. Useful for running multiple instances. " +
+          "Commands will not work when this flag is set.",
+      },
       E: {
         alias: "no-nvenc",
         type: "string",
@@ -135,6 +144,7 @@ const parseArgs = async () => {
     R: videoProfile,
     x: pixelFormat,
     f: outputFormat,
+    I: noIpc,
     E: noNvenc,
   } = await parser.argv;
 
@@ -199,7 +209,9 @@ const parseArgs = async () => {
     defaults.replaceExisting ? "-y" : "-n",
   ];
 
-  await runIpc();
+  if (!noIpc) {
+    await runIpc();
+  }
 
   return args;
 };
