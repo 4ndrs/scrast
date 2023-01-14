@@ -12,6 +12,7 @@ const main = async () => {
 
   ffmpeg.run(args);
   ffmpeg.onClose(screen.end);
+  ffmpeg.onClose(ipc.kill);
 
   process.on("SIGINT", handleStop);
   process.on("SIGTERM", handleStop);
