@@ -10,13 +10,20 @@ const listener = net.createServer((connection) => {
 
     switch (command) {
       case "stop":
-        process.send("stop");
+        process.send(command);
+        connection.end();
         break;
       case "pause":
-        process.send("pause");
+        process.send(command);
+        connection.end();
         break;
       case "resume":
-        process.send("resume");
+        process.send(command);
+        connection.end();
+        break;
+      case "info":
+        process.send(command);
+        process.on("message", (message) => connection.end(`${message}\n`));
         break;
       case "ping":
         connection.end("pong narashite!\n");
@@ -27,9 +34,9 @@ const listener = net.createServer((connection) => {
       case "ping pong narashite":
         connection.end("ping pong pong, girls ganbare!🍀\n");
         break;
+      default:
+        connection.end();
     }
-
-    connection.end();
   });
 });
 

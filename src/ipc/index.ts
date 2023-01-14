@@ -1,9 +1,10 @@
-import path from "path";
 import { fork } from "child_process";
 import { connect } from "node:net";
 import { existsSync, unlinkSync } from "fs";
 
 import ffmpeg from "../ffmpeg";
+import { getStore } from "../store";
+import { getHumanSize, getHumanTime } from "../utils";
 
 import type { ChildProcess, Serializable } from "child_process";
 
@@ -13,7 +14,7 @@ const SOCKETFILE = "/tmp/scrast.sock";
 const start = async () => {
   await checkSocket();
 
-  listener = fork(`${path.dirname(__filename)}/listener`);
+  listener = fork(`${__dirname}/listener`);
   listener.on("message", handleMessage);
 };
 
@@ -37,14 +38,36 @@ const handleMessage = (message: Serializable) => {
     case "resume":
       ffmpeg.resume();
       break;
+    case "info":
+      listener.send(getInfo());
+      break;
   }
 };
 
+const getInfo = () => {
+  const { status, size, seconds } = getStore();
+
+  return (
+    `Status: ${status}\n` +
+    `Elapsed: ${getHumanTime(seconds)}\n` +
+    `Size: ${getHumanSize(size)}`
+  );
+};
+
 const sendMessageToSocket = (message: string) =>
-  new Promise((resolve, reject) => {
+  new Promise<void | string>((resolve, reject) => {
     const connection = connect(SOCKETFILE);
 
-    connection.on("ready", () => resolve(connection.write(message)));
+    if (message === "info") {
+      connection.write(message);
+      connection.on("data", (data) => resolve(data.toString()));
+    } else {
+      connection.on("ready", () => {
+        connection.write(message);
+        resolve();
+      });
+    }
+
     connection.on("error", () => reject("socket is inactive"));
   });
 
