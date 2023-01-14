@@ -1,7 +1,7 @@
 import path from "path";
 import { fork } from "child_process";
 import { connect } from "node:net";
-import { unlinkSync } from "fs";
+import { existsSync, unlinkSync } from "fs";
 
 import ffmpeg from "../ffmpeg";
 
@@ -54,10 +54,14 @@ const sendMessageToSocket = (message: string) =>
  */
 const checkSocket = () =>
   new Promise<void>((resolve, reject) => {
-    const connection = connect(SOCKETFILE);
+    if (existsSync("/tmp/scrast.sock")) {
+      const connection = connect(SOCKETFILE);
 
-    connection.on("ready", () => reject("socket is active"));
-    connection.on("error", () => resolve(unlinkSync(SOCKETFILE)));
+      connection.on("ready", () => reject("socket is active"));
+      connection.on("error", () => resolve(unlinkSync(SOCKETFILE)));
+    } else {
+      resolve();
+    }
   });
 
 export default { start, kill, sendMessageToSocket };
