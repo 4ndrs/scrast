@@ -100,18 +100,23 @@ const parseArgs = async () => {
     })
     .command(
       "stop",
-      "sends the stop signal to the currently running instance.",
+      "sends the stop command to the currently running instance.",
       () => sendCommand("stop")
     )
     .command(
       "pause",
-      "sends the pause signal to the currently running instance.",
+      "sends the pause command to the currently running instance.",
       () => sendCommand("pause")
     )
     .command(
       "resume",
-      "sends the resume signal to the currently running instance.",
+      "sends the resume command to the currently running instance.",
       () => sendCommand("resume")
+    )
+    .command(
+      "info",
+      "sends the info command to the currently running instance.",
+      () => sendCommand("info")
     )
     .alias("help", "h")
     .alias("version", "v")
@@ -214,11 +219,16 @@ const runIpc = async () => {
 
 const sendCommand = async (command: string) => {
   try {
-    await ipc.sendMessageToSocket(command);
+    const message = await ipc.sendMessageToSocket(command);
+
+    if (message) {
+      process.stdout.write(message);
+    }
+
     process.exit();
   } catch (error) {
     if (typeof error === "string" && error === "socket is inactive") {
-      console.error("There is no instance running");
+      process.stderr.write("There is no instance running\n");
       process.exit(1);
     }
 
