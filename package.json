@@ -11,6 +11,9 @@
   "bin": {
     "scrast": "bin/scrast"
   },
+  "os": [
+    "linux"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/4ndrs/scrast.git"
