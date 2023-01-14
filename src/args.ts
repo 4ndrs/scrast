@@ -24,58 +24,68 @@ const parseArgs = async () => {
 
   const parser = yargs(process.argv.slice(2))
     .options({
-      r: {
-        alias: "inputFrameRate",
-        type: "number",
-        default: defaults.frameRate,
-      },
       i: {
         alias: "input",
         default: defaults.input,
       },
-      probeSize: {
-        default: defaults.probeSize,
+      r: {
+        alias: "framerate",
+        type: "number",
+        default: defaults.frameRate,
       },
-      preset: {
-        default: defaults.preset,
-        choices: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"],
-      },
-      tune: {
-        default: defaults.tune,
-        choices: ["hq", "ll", "ull", "lossless"],
-      },
-      videoProfile: {
-        default: defaults.videoProfile,
-      },
-      pixelFormat: {
-        default: defaults.pixelFormat,
-      },
-      outputFormat: {
-        default: defaults.outputFormat,
-      },
-      alsaAudio: {
-        type: "string",
-        describe:
-          "One of the devices shown in `arecord -L`. Audio will be " +
-          "enabled if set.",
-      },
-      selectRegion: {
+      s: {
+        alias: "select-region",
         type: "boolean",
         default: defaults.selectRegion,
         describe:
           "If set, will be asked to select a region on the screen to be " +
           "recorded.",
       },
-      windowId: {
+      w: {
+        alias: "window-id",
         type: "string",
         default: defaults.windowId,
         describe:
           "The window to record. Default is the root window. Use " +
           "xwininfo to get the ID.",
       },
-      noMouse: {
+      N: {
+        alias: "no-mouse",
         type: "boolean",
         default: defaults.noMouse,
+      },
+      P: {
+        alias: "probesize",
+        default: defaults.probeSize,
+      },
+      p: {
+        alias: "preset",
+        default: defaults.preset,
+        choices: ["p1", "p2", "p3", "p4", "p5", "p6", "p7"],
+      },
+      t: {
+        alias: "tune",
+        default: defaults.tune,
+        choices: ["hq", "ll", "ull", "lossless"],
+      },
+      R: {
+        alias: "profile:v",
+        default: defaults.videoProfile,
+      },
+      x: {
+        alias: "pix_fmt",
+        default: defaults.pixelFormat,
+      },
+      f: {
+        alias: "output-format",
+        default: defaults.outputFormat,
+      },
+      a: {
+        alias: "alsa-audio",
+        type: "string",
+        describe:
+          "One of the devices shown in `arecord -L`. Audio will be " +
+          "enabled if set.",
       },
     })
     .command(
@@ -93,21 +103,23 @@ const parseArgs = async () => {
       "sends the resume signal to the currently running instance.",
       () => sendCommand("resume")
     )
+    .alias("help", "h")
+    .alias("version", "v")
     .strict();
 
   const {
     r: rate,
     i: input,
-    alsaAudio,
-    noMouse,
-    selectRegion,
-    windowId,
-    probeSize,
-    preset,
-    tune,
-    videoProfile,
-    pixelFormat,
-    outputFormat,
+    a: alsaAudio,
+    N: noMouse,
+    s: selectRegion,
+    w: windowId,
+    P: probeSize,
+    p: preset,
+    t: tune,
+    R: videoProfile,
+    x: pixelFormat,
+    f: outputFormat,
   } = await parser.argv;
 
   const videoInputArgs = [
