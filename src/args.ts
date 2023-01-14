@@ -69,11 +69,11 @@ const parseArgs = async () => {
         choices: ["hq", "ll", "ull", "lossless"],
       },
       R: {
-        alias: "profile:v",
+        alias: "video-profile",
         default: defaults.videoProfile,
       },
       x: {
-        alias: "pix_fmt",
+        alias: "pixel-format",
         default: defaults.pixelFormat,
       },
       f: {
