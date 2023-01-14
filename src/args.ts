@@ -18,7 +18,7 @@ const parseArgs = async () => {
     videoProfile: "high444p",
     pixelFormat: "yuv444p",
     outputFormat: "matroska",
-    doNotReplaceExisting: false,
+    replaceExisting: true,
     noMouse: false,
   };
 
@@ -73,11 +73,6 @@ const parseArgs = async () => {
           "The window to record. Default is the root window. Use " +
           "xwininfo to get the ID.",
       },
-      n: {
-        alias: "doNotReplaceExisting",
-        type: "boolean",
-        default: defaults.doNotReplaceExisting,
-      },
       noMouse: {
         type: "boolean",
         default: defaults.noMouse,
@@ -113,7 +108,6 @@ const parseArgs = async () => {
     videoProfile,
     pixelFormat,
     outputFormat,
-    n: doNotReplaceExisting,
   } = await parser.argv;
 
   const videoInputArgs = [
@@ -172,7 +166,7 @@ const parseArgs = async () => {
     "-f",
     outputFormat,
     outputFile,
-    doNotReplaceExisting ? "-n" : "-y",
+    defaults.replaceExisting ? "-y" : "-n",
   ];
 
   await runIpc();
