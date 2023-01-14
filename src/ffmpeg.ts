@@ -35,7 +35,7 @@ const kill = () => {
   }
 
   updateStatus("stopping");
-  process.kill("SIGTERM");
+  process.kill("SIGINT");
 };
 
 const pause = () => {
