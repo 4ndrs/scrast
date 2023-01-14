@@ -40,7 +40,7 @@ const parseArgs = async () => {
         default: defaults.selectRegion,
         describe:
           "If set, will be asked to select a region on the screen to be " +
-          "recorded.",
+          "recorded",
       },
       w: {
         alias: "window-id",
@@ -48,7 +48,7 @@ const parseArgs = async () => {
         default: defaults.windowId,
         describe:
           "The window to record. Default is the root window. Use " +
-          "xwininfo to get the ID.",
+          "xwininfo to get the ID",
       },
       N: {
         alias: "no-mouse",
@@ -86,7 +86,7 @@ const parseArgs = async () => {
         type: "string",
         describe:
           "One of the devices shown in `arecord -L`. Audio will be " +
-          "enabled if set.",
+          "enabled if set",
       },
       I: {
         alias: "no-ipc",
@@ -94,7 +94,7 @@ const parseArgs = async () => {
         default: defaults.noIpc,
         describe:
           "Disables the IPC. Useful for running multiple instances. " +
-          "Commands will not work when this flag is set.",
+          "Commands will not work when this flag is set",
       },
       E: {
         alias: "no-nvenc",
@@ -107,30 +107,18 @@ const parseArgs = async () => {
           "e.g.: -E='-c:v libx264 -preset ultrafast'",
       },
     })
-    .command(
-      "stop",
-      "sends the stop command to the currently running instance.",
-      () => sendCommand("stop")
-    )
-    .command(
-      "pause",
-      "sends the pause command to the currently running instance.",
-      () => sendCommand("pause")
-    )
-    .command(
-      "resume",
-      "sends the resume command to the currently running instance.",
-      () => sendCommand("resume")
-    )
-    .command(
-      "info",
-      "sends the info command to the currently running instance.",
-      () => sendCommand("info")
-    )
+    .command("stop", "sends the stop command", () => sendCommand("stop"))
+    .command("pause", "sends the pause command", () => sendCommand("pause"))
+    .command("resume", "sends the resume command", () => sendCommand("resume"))
+    .command("info", "sends the info command", () => sendCommand("info"))
     .alias("help", "h")
     .alias("version", "v")
     .strict()
-    .usage("Command line utility to record the screen.\nUsage: $0 [options]");
+    .usage(
+      "Command line utility to record the screen\n\nUsage:\n\n" +
+        "$0 [options]  starts an instance with the specified options\n" +
+        "$0 [command]  sends the specified command to the running instance"
+    );
 
   const {
     r: rate,
