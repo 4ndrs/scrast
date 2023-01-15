@@ -22,7 +22,7 @@ The short preview video above shows the usage of the ```--windowId``` and ```--s
 All of the available options/commands can be requested using the ```--help``` flag:
 
 ```console
- $ scrast --help
+$ scrast --help
 Command line utility to record the screen
 
 Usage:
@@ -92,7 +92,7 @@ $ scrast --noNvenc='-c:v libx264 -preset ultrafast' --alsaAudio pulse
 
 ## A Note on Pause & Resume
 
-The current implementation of pause & resume is extremely experimental, and will not work as intended most of the times. The current implementation just sends the ```SIGTSTP```, and ```SIGCONT``` signals to the ffmpeg process.
+The current implementation of pause & resume is extremely experimental, and will not work as intended most of the times. It just sends the ```SIGTSTP```, and ```SIGCONT``` signals to the ffmpeg process.
 
 
 ## Building
