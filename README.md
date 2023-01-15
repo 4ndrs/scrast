@@ -36,7 +36,7 @@ Commands:
   scrast resume  sends the resume command
   scrast info    sends the info command
 
-ptions:
+Options:
   -h, --help          Show help                                        [boolean]
   -v, --version       Show version number                              [boolean]
   -i, --input                                                  [default: ":0.0"]
