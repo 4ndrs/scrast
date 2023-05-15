@@ -14,7 +14,9 @@ The project is available in the npm registry, and can be installed with npm:
 ## Usage
 
 
-[usage_preview.webm](https://user-images.githubusercontent.com/31898900/212485750-fd9ff290-e4a6-4c8a-b250-0e5246a49824.webm)
+[usage_preview.webm](https://github.com/4ndrs/scrast/assets/31898900/e9269b50-0eb6-4129-825a-604275aa3c58)
+
+
 
 
 The short preview video above shows the usage of the ```--windowId``` and ```--selectRegion``` option flags, plus the commands available to communicate with the instance doing the recording. The ```get_window_id``` is an alias to ```xwininfo | sed -n "s/^.*id: \(\w*\).*$/\1/p"``` that I have added to my shell for convenience.
@@ -69,7 +71,7 @@ Options:
 Running the utility without any options or commands will record the whole screen by default. Picking a window with ```--windowId``` will record only the selected window and overlaid windows (or transient windows like the context menu) will not be recorded. Here is the video recorded in the preview above with the ```--windowId``` option flag:
 
 
-[1673717680349787.webm](https://user-images.githubusercontent.com/31898900/212487300-1938ca84-2eb7-458e-8092-b27d29318ead.webm)
+[1673717680349787.webm](https://github.com/4ndrs/scrast/assets/31898900/f50bff88-181b-4ed8-89f9-151271bb21b0)
 
 
 As it can be seen, the picture moved around in the preview video is not shown in the final file. This does not happen with ```--selectRegion```, or when picking the root window.
